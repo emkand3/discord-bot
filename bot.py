@@ -89,7 +89,7 @@ async def on_message(message):
       print("yassss done")
       anagram_game_started = False
       anagram_game_finished = True
-      await message.channel.send("yass you did it")
+      await message.reply("yass you did it")
 
 
 bot.run(token['token'])
