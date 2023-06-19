@@ -29,29 +29,7 @@ intents.message_content = True
 #initialize bot commands
 bot = commands.Bot(command_prefix='!', intents=intents)
 
-#show when client is awake
-
-
-#return message
-'''
-@client.event
-async def on_message(message):
-  if message.author == client.user:
-    return
-
-# Return a single random word
-
-  if message.content.startswith('$a'):
-    valid_word = False
-    while not valid_word:
-      word = r.get_random_word(hasDictionaryDef="true", includePartOfSpeech="noun,verb,adjective", minDictionaryCount=15, minLength=4)
-      if word:
-        valid_word = True
-    anagram = word_jumble(word)
-    print(anagram + " ...actual word: " + word)
-    await message.channel.send(anagram + " ...actual word: " + word)
-'''
-
+#command for handling anagram game
 @bot.command(name="anagram")
 async def anagram_start(ctx):
   
@@ -72,11 +50,12 @@ async def anagram_start(ctx):
   anagram_normal = word.strip()
   anagram_jumbled = anagram
   print(anagram)
-  anagram_game_started = True
   await ctx.send("Starting your anagram game...")
+  #TODO: add functionality for specific users joining a game
   await ctx.send("Your word is: " + anagram)
+  anagram_game_started = True
 
-
+#parses sent messages
 @bot.event
 async def on_message(message):
   if message.author == bot.user:
