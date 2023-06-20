@@ -72,21 +72,39 @@ async def anagram_start(ctx):
     await asyncio.sleep(1)
 
   #start the anagram functionality
-  await ctx.send("Your word is: " + anagram)
-  anagram_game_started = True
+  if len(anagram_players) == 0:
+    await ctx.send("No one joined!")
+  else:
+    await ctx.send("Your word is: " + anagram)
+    anagram_game_started = True
+    timerVal = 60
+    #message = await ctx.send(f"Timer: {timerVal}")
+    while True:
+      timerVal -= 1
+      if timerVal == 0:
+        #await message.edit(content=f"Times up!")
+        break
+      #await message.edit(content=f"Timer: {timerVal}")
+      await asyncio.sleep(1)
+    
+    if not anagram_game_finished:
+      await ctx.send(f"No one got it! The word was {anagram_normal}")
+      anagram_game_started = False
+      anagram_normal = ""
+      anagram_jumbled = ""
+    else:
+      anagram_game_finished = False
 
 
-#test timer
-@bot.command(name="timer")
 async def timer(ctx, time):
   timerVal = int(time)
-  message = await ctx.send(f"Timer: {timerVal}")
+  #message = await ctx.send(f"Timer: {timerVal}")
   while True:
     timerVal -= 1
     if timerVal == 0:
-      await message.edit(content=f"Times up!")
+      #await message.edit(content=f"Times up!")
       break
-    await message.edit(content=f"Timer: {timerVal}")
+    #await message.edit(content=f"Timer: {timerVal}")
     await asyncio.sleep(1)
 
 
@@ -106,6 +124,7 @@ async def on_message(message):
       anagram_normal = ""
       anagram_jumbled = ""
       anagram_players = []
+
 
 
 bot.run(token['token'])
