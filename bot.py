@@ -5,6 +5,8 @@ import random
 import json
 import asyncio
 
+
+#global anagram variables
 anagram_game_started = False
 anagram_game_finished = False
 anagram_jumbled = ""
@@ -54,7 +56,7 @@ async def anagram_start(ctx):
   anagram_jumbled = anagram
 
   #start a timer for joining the game
-  timerVal = 10
+  timerVal = 20
   start_message = await ctx.send(f"Anagram game starting in {timerVal}s.\nReact to join!")
   await start_message.add_reaction("🎟")
 
@@ -78,13 +80,10 @@ async def anagram_start(ctx):
     await ctx.send("Your word is: " + anagram)
     anagram_game_started = True
     timerVal = 60
-    #message = await ctx.send(f"Timer: {timerVal}")
     while True:
       timerVal -= 1
       if timerVal == 0:
-        #await message.edit(content=f"Times up!")
         break
-      #await message.edit(content=f"Timer: {timerVal}")
       await asyncio.sleep(1)
     
     if not anagram_game_finished:
@@ -94,19 +93,6 @@ async def anagram_start(ctx):
       anagram_jumbled = ""
     else:
       anagram_game_finished = False
-
-
-async def timer(ctx, time):
-  timerVal = int(time)
-  #message = await ctx.send(f"Timer: {timerVal}")
-  while True:
-    timerVal -= 1
-    if timerVal == 0:
-      #await message.edit(content=f"Times up!")
-      break
-    #await message.edit(content=f"Timer: {timerVal}")
-    await asyncio.sleep(1)
-
 
 #parses sent messages
 @bot.event
@@ -124,7 +110,5 @@ async def on_message(message):
       anagram_normal = ""
       anagram_jumbled = ""
       anagram_players = []
-
-
 
 bot.run(token['token'])
