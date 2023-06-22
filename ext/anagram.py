@@ -90,7 +90,7 @@ class Anagram(commands.Cog):
             if ctx.guild.id in self.active_guilds and not self.active_guilds[ctx.guild.id]["over"]:
                 await ctx.send(f"No one got it! The word was {self.active_guilds[ctx.guild.id]['word']}")
                 del self.active_guilds[ctx.guild.id]
-            if self.active_guilds[ctx.guild.id]["over"]:
+            if ctx.guild.id in self.active_guilds and self.active_guilds[ctx.guild.id]["over"]:
                 del self.active_guilds[ctx.guild.id]
     
     #   listens for messages from user
