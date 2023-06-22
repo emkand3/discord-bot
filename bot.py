@@ -2,6 +2,8 @@ import discord
 from discord.ext import commands
 import json
 import random
+from data.url import katana, hannah, parker, fletcher, inanimate, nelly, maggie, peeing, great_dane
+from data.url import content_dict, rarity_dict
 
 #global anagram variables
 anagram_game_started = False
@@ -54,8 +56,27 @@ async def on_ready():
 @bot.command(name="zuko")
 async def zuko_pic(ctx):
   global messages
-  msg_num = random.randint(0, len(messages)-1)
-  await ctx.send(messages[msg_num].attachments[0].url)
+  rand_num = random.randint(0, len(messages)-1)
+  msg_num = messages[rand_num].id
+  if msg_num in katana:
+    await ctx.send(f"{rarity_dict['uncommon']}{content_dict['katana_msg'][random.randint(0, len(content_dict['katana_msg'])-1)]}")
+  elif msg_num in parker:
+    await ctx.send(f"{rarity_dict['uncommon']}{content_dict['parker_msg'][random.randint(0, len(content_dict['parker_msg'])-1)]}")
+  elif msg_num in maggie:
+    await ctx.send(f"{rarity_dict['rare']}{content_dict['maggie_msg'][random.randint(0, len(content_dict['maggie_msg'])-1)]}")
+  elif msg_num in great_dane:
+    await ctx.send(f"{rarity_dict['rare']}{content_dict['great_dane_msg'][random.randint(0, len(content_dict['great_dane_msg'])-1)]}")
+  elif msg_num in fletcher:
+    await ctx.send(f"{rarity_dict['rare']}{content_dict['fletcher_msg'][random.randint(0, len(content_dict['fletcher_msg'])-1)]}")
+  elif msg_num in nelly:
+    await ctx.send(f"{rarity_dict['rare']}{content_dict['nelly_msg'][random.randint(0, len(content_dict['nelly_msg'])-1)]}")
+  elif msg_num in hannah:
+    await ctx.send(f"{rarity_dict['rare']}{content_dict['hannah_msg'][random.randint(0, len(content_dict['hannah_msg'])-1)]}")
+  elif msg_num in peeing:
+    await ctx.send(f"{rarity_dict['mythical']}{content_dict['peeing_msg'][random.randint(0, len(content_dict['peeing_msg'])-1)]}")
+  elif msg_num in inanimate:
+    await ctx.send(f"{rarity_dict['mythical']}{content_dict['inanimate_msg'][random.randint(0, len(content_dict['inanimate_msg'])-1)]}")
+  await ctx.send(messages[rand_num].attachments[0].url)
 
 @bot.event
 async def on_message(message):
