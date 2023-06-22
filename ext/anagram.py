@@ -50,9 +50,8 @@ class Anagram(commands.Cog):
             word = r.get_random_word(hasDictionaryDef="true", includePartOfSpeech="noun,verb,adjective", minDictionaryCount=15, minLength=4)
             if word:
                 valid_word = True
-        anagram = word_jumble(word)
+        self.active_guilds[ctx.guild.id]["jumble"] = word_jumble(word)
         self.active_guilds[ctx.guild.id]["word"] = word.strip()
-        self.active_guilds[ctx.guild.id]["jumble"] = anagram
 
         #start a timer for joining the game
         joinTimerVal = JOIN_TIME
@@ -84,11 +83,14 @@ class Anagram(commands.Cog):
                 gameTimerVal -= 1
                 if gameTimerVal == 0:
                     break
+                if self.active_guilds[ctx.guild.id]["over"]:
+                    break
                 await asyncio.sleep(1)
-            
             #handles state where word is not guessed in time
             if ctx.guild.id in self.active_guilds and not self.active_guilds[ctx.guild.id]["over"]:
                 await ctx.send(f"No one got it! The word was {self.active_guilds[ctx.guild.id]['word']}")
+                del self.active_guilds[ctx.guild.id]
+            if self.active_guilds[ctx.guild.id]["over"]:
                 del self.active_guilds[ctx.guild.id]
     
     #   listens for messages from user
@@ -100,7 +102,7 @@ class Anagram(commands.Cog):
         if message.guild.id in self.active_guilds and message.author in self.active_guilds[message.guild.id]["players"]:
             if message.content.lower() == self.active_guilds[message.guild.id]["word"]:
                 await message.reply(f"You did it! The word was {self.active_guilds[message.guild.id]['word']}")
-                del self.active_guilds[message.guild.id]
+                self.active_guilds[message.guild.id]["over"] = True
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(Anagram(bot))
