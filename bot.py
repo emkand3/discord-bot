@@ -5,13 +5,6 @@ import random
 from data.url import katana, hannah, parker, fletcher, inanimate, nelly, maggie, peeing, great_dane
 from data.url import content_dict, rarity_dict
 
-#global anagram variables
-anagram_game_started = False
-anagram_game_finished = False
-anagram_jumbled = ""
-anagram_normal = ""
-anagram_players = []
-
 # get token from hidden file
 file = open('config.json')
 token = json.load(file)
@@ -21,7 +14,7 @@ token = json.load(file)
 #function for jumbling words
 
 #initialize client
-intents = discord.Intents.default()
+intents = discord.Intents.all()
 intents.message_content = True
 
 loaded = False
@@ -37,8 +30,17 @@ cogs = [
 ]
 
 activity = discord.Game(name="$anagram")
+bot = commands.Bot(command_prefix='$', intents=intents, activity=activity)
 
-bot = commands.Bot(command_prefix='$', intents=intents,  help_command = help_command, activity=activity)
+class MyNewHelp(commands.MinimalHelpCommand):
+    async def send_pages(self):
+        destination = self.get_destination()
+        for page in self.paginator.pages:
+            help_embed = discord.Embed(title="**Help**", description=page, color=discord.Colour.purple())
+            await destination.send(embed=help_embed)
+
+bot.help_command = MyNewHelp()
+
 
 @bot.event
 async def on_ready():
@@ -50,10 +52,9 @@ async def on_ready():
     print(len(messages))
     loaded = True
     print("loading up...")
-    
 
 #generates a random zuko picture from zuko-pics-database channel
-@bot.command(name="zuko")
+@bot.command(name="zuko", brief="Get a random Zuko picture")
 async def zuko_pic(ctx):
   global messages
   rand_num = random.randint(0, len(messages)-1)
