@@ -2,6 +2,10 @@ import discord
 from discord.ext import commands
 import asyncio, random
 from random_word import Wordnik
+import json
+import flagpy
+from io import BytesIO
+from PIL import Image
 
 #   global constants for game state (possibly make configurable?)
 JOIN_TIME = 20
@@ -20,13 +24,13 @@ def word_jumble(word):
 #   self.active_guild is a dictionary of dictionaries to keep track
 #   of game states per guild
 
-class Anagram(commands.Cog):
+class Games(commands.Cog, description="ZukoBot Games"):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.active_guilds = {}
     
     #   anagram command ($anagram)
-    @commands.command(name='anagram')
+    @commands.command(name='anagram', brief='Starts an anagram game')
     async def game_initializer(self, ctx):
 
         #checks if a guild has a game in progess
@@ -92,6 +96,29 @@ class Anagram(commands.Cog):
                 del self.active_guilds[ctx.guild.id]
             if ctx.guild.id in self.active_guilds and self.active_guilds[ctx.guild.id]["over"]:
                 del self.active_guilds[ctx.guild.id]
+
+    @commands.command(name="leaderboard", aliases=["lb"], brief="Shows the anagram leaderboard")
+    async def leaderboard(self, ctx):
+        file = open('leaderboard.json')
+        data = json.load(file)
+        if ctx.guild.id not in data:
+            data[ctx.guild.id] = {}
+            for mbr in ctx.guild.members:
+                if mbr.name != "ZukoBot" and mbr.global_name != None:
+                    data[ctx.guild.id][mbr.global_name] = 0
+        print(data)
+        file.close()
+        await ctx.send("@emkand3")
+
+    @commands.command(name="flag", aliases=["flags"], brief="Flag guessing game")
+    async def flag_game(self, ctx):
+        img = flagpy.get_flag_img("Yemen")
+        img = img.open()
+        bytes_msg = BytesIO()
+        img.save(bytes_msg, format="PNG")
+        bytes_msg.seek(0)
+        await ctx.send(file=discord.File(fp=img, filename='flag.png'))
+        
     
     #   listens for messages from user
     @commands.Cog.listener()
@@ -101,8 +128,9 @@ class Anagram(commands.Cog):
         #listens specifically for anagram game messages by making sure the messager is registered in the game
         if message.guild.id in self.active_guilds and message.author in self.active_guilds[message.guild.id]["players"]:
             if message.content.lower() == self.active_guilds[message.guild.id]["word"]:
-                await message.reply(f"You did it! The word was {self.active_guilds[message.guild.id]['word']}")
-                self.active_guilds[message.guild.id]["over"] = True
+                if not self.active_guilds[message.guild.id]["over"]:
+                    self.active_guilds[message.guild.id]["over"] = True
+                    await message.reply(f"You did it! The word was {self.active_guilds[message.guild.id]['word']}")
 
 async def setup(bot: commands.Bot):
-    await bot.add_cog(Anagram(bot))
+    await bot.add_cog(Games(bot))
