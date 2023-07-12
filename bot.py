@@ -4,6 +4,10 @@ import json
 import random
 from data.url import katana, hannah, parker, fletcher, inanimate, nelly, maggie, peeing, great_dane
 from data.url import content_dict, rarity_dict
+import os
+
+import certifi
+os.environ["SSL_CERT_FILE"] = certifi.where()
 
 # get token from hidden file
 file = open('config.json')

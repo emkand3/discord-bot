@@ -112,14 +112,18 @@ class Games(commands.Cog, description="ZukoBot Games"):
 
     @commands.command(name="flag", aliases=["flags"], brief="Flag guessing game")
     async def flag_game(self, ctx):
-        img = flagpy.get_flag_img("Yemen")
-        img = img.open()
-        bytes_msg = BytesIO()
-        img.save(bytes_msg, format="PNG")
-        bytes_msg.seek(0)
-        await ctx.send(file=discord.File(fp=img, filename='flag.png'))
+        country = random.choice(flagpy.get_country_list())
+        img = flagpy.get_flag_img(country)
+
+        #TODO: whatever this was supposed to do...
+        width, height = img.size
+
         
-    
+        bytes = BytesIO()
+        img.save(bytes, format="PNG")
+        bytes.seek(0)
+        await ctx.send(file=discord.File(bytes, filename="flag.png"))
+
     #   listens for messages from user
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
