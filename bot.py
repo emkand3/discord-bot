@@ -93,7 +93,7 @@ async def on_message(message):
     global pee_ctr
     await message.reply(f"bren pee counter: {pee_ctr} (yet)")
     pee_ctr+=1
-  if message.author.id == 778145078581133322 and "MMM" in message.content:
+  if message.author.id == 778145078581133322 and ("MMM" in message.content or "slurp" in message.content.lower() or "suck" in message.content.lower()):
     await message.reply("SLURPY SLURPY SUCKY MMMM SLUCK SUCK SUCKY SLURP SLURP SLURP FOR HAMSTER SUCKER MMMM SLURPY SLURP GLU GLUG")
   if message.author.id == 235857970364153856 and "fraud" in message.content.lower() and "commit" in message.content.lower():
     await message.reply("im calling the police")
