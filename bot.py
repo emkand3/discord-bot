@@ -83,25 +83,4 @@ async def zuko_pic(ctx):
     await ctx.send(f"{rarity_dict['mythical']}{content_dict['inanimate_msg'][random.randint(0, len(content_dict['inanimate_msg'])-1)]}")
   await ctx.send(messages[rand_num].attachments[0].url)
 
-@bot.event
-async def on_message(message):
-  if message.author == bot.user:
-    return
-  if message.author.id == 218500036995055617 and "yass" in message.content.lower():
-    await message.reply("YASS QUEEN!!!")
-  if message.author.id == 274004148276690944 and "pee" in message.content.lower():
-    global pee_ctr
-    await message.reply(f"bren pee counter: {pee_ctr} (yet)")
-    pee_ctr+=1
-  if message.author.id == 778145078581133322 and ("MMM" in message.content or "slurp" in message.content.lower() or "suck" in message.content.lower()):
-    await message.reply("SLURPY SLURPY SUCKY MMMM SLUCK SUCK SUCKY SLURP SLURP SLURP FOR HAMSTER SUCKER MMMM SLURPY SLURP GLU GLUG")
-  if message.author.id == 235857970364153856 and "fraud" in message.content.lower() and "commit" in message.content.lower():
-    await message.reply("im calling the police")
-  if message.author.id == 588201757633675279 and "taylor swift" in message.content.lower():
-    await message.reply("Taylor Swift 😀 feeeaarless 😌 SPEAK NO OW 😫 reeeh (eh ed) 🤓 1989 😐 reputashuunn 😋 loooooveeerrrrrr 😍 folklooree 😕 evermore 😣 MidNights 😜")
-  if ("four" in message.content.lower() or "onceler" in message.content.lower()) and ("hot" in message.content.lower() or "daddy" in message.content.lower()):
-    await message.reply("the horny police have arrived")
-  await bot.process_commands(message)
-
-
 bot.run(token['token'])
